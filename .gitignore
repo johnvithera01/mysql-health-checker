@@ -1,0 +1,11 @@
+# Ignorar arquivos de log
+log/
+*.log
+
+# config/mysql_monitor_config.yml
+*~
+*.bak
+*.tmp
+.bundle/
+vendor/bundle/
+Gemfile.lock 
