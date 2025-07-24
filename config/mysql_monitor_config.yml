@@ -1,0 +1,47 @@
+database:
+  host: localhost
+  port: 3306
+  name: your_mysql_database # Substitua pelo nome do seu banco de dados MySQL
+
+email:
+  sender_email: monitor@example.com
+  receiver_email: admin@example.com
+  smtp_address: smtp.example.com
+  smtp_port: 587
+  smtp_domain: example.com
+
+thresholds:
+  iostat_threshold_kb_s: 500000 # KB/s - Ex: 500MB/s (ajuste conforme seu hardware)
+  iostat_device: sda            # Dispositivo de disco a monitorar (ex: sda, nvme0n1)
+  cpu_threshold_percent: 80     # % de uso de CPU antes de alertar
+  query_alert_threshold_seconds: 60 # Segundos para alertar sobre consultas longas
+  query_kill_threshold_seconds: 300 # Segundos para tentar matar consultas (se auto_kill_rogue_processes for true)
+  innodb_buffer_pool_hit_ratio_min: 95 # % mínimo de hit ratio do InnoDB Buffer Pool
+  innodb_dirty_pages_threshold_percent: 75 # % máximo de páginas sujas no InnoDB Buffer Pool antes de alertar
+  disk_space_threshold_percent: 90 # % de uso de disco para a partição de dados do MySQL
+  replication_lag_seconds_threshold: 60 # Segundos de lag de replicação antes de alertar
+
+  # Novas configurações para as melhorias
+  connections_warning_percent: 85 # % de conexões usadas (atuais ou pico) para emitir alerta
+  tmp_disk_tables_threshold: 10 # % de tabelas temporárias criadas em disco para emitir alerta (0-100)
+  opened_tables_warning_threshold: 90 # % de `table_open_cache` usado para emitir alerta (0-100)
+  handler_read_rnd_next_warning_threshold: 1000000 # Valor absoluto para Handler_read_rnd_next para emitir alerta (ex: 1 milhão de varreduras completas)
+  handler_read_key_warning_threshold: 1000000 # Valor absoluto para Handler_read_key, para contexto com rnd_next
+
+cooldown:
+  alert_cooldown_minutes: 30 # Cooldown entre emails de alerta do mesmo tipo
+  last_alert_file: log/mysql_last_alert_times.json
+  last_deadlock_file: log/mysql_last_deadlock_info.json
+
+logging:
+  log_file: log/mysql_monitor.log
+  log_level: info
+
+mysql_logs:
+  path: /var/log/mysql     # Caminho para os logs de erro do MySQL (ex: /var/log/mysql ou /var/lib/mysql/hostname.err)
+  error_log_file_pattern: "*.err" # Padrão para o arquivo de log de erro (ex: "*.err" ou "mysql.log")
+  slow_log_path: /var/log/mysql # Caminho para o slow query log (pode ser o mesmo do error log)
+  slow_log_file_pattern: "*.log" # Padrão para o slow query log (ex: "mysql-slow.log")
+
+features:
+  auto_kill_rogue_processes: false # CUIDADO: Habilitar isso pode encerrar consultas importantes
